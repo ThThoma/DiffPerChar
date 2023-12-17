@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DiffPerChar - Text Difference Visualization</title>
+  <style>
+    table.diffTable {
+      border: 1px solid #aaaaaa;
+      border-collapse: collapse;
+      border-style: groove;
+      border-radius: 4px;
+      width: 40%;
+      table-layout: fixed;
+    }
+
+    table.diffTable th,
+    table.diffTable td {
+      border: 1px solid #aaaaaa;
+      text-align: center;
+    }
+
+    table.diffTable th {
+      background-color: azure;
+      padding: 8px;
+    }
+
+    table.diffTable td {
+      font-family: monospace;
+      font-size: larger;
+      padding: 4px;
+    }
+
+    table.inputTable {
+      border: none;
+      padding: 8px;
+      border-collapse: collapse;
+      width: 100%;
+      table-layout: fixed;
+      text-align: left;
+    }
+
+    table.inputTable td:nth-child(2) input {
+      font-family: 'Courier New', monospace;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .diff {
+      background-color: #ffffaa;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="inputContainer"></div>
+  <div id="diffContainer"></div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const columnA = urlParams.get('columnA') || 'textA';
+    const columnB = urlParams.get('columnB') || 'textB';
+    const textA = urlParams.get('textA') || '';
+    const textB = urlParams.get('textB') || '';
+
+
+    function compareStrings(str1, str2, colA, colB) {
+      let diffResult = '<table class="diffTable">';
+      diffResult +=
+        `<tr>
+                  <th style="width: 5%;"></th>    
+                  <th style="width: 45%;">${colA}</th>
+                  <th style="width: 45%;">${colB}</th>
+                  <th style="width: 5%;">Diff</th>
+
+                  </tr>`;
+
+      for (let i = 0; i < Math.max(str1.length, str2.length); i++) {
+        const char1 = str1[i] || '';
+        const char2 = str2[i] || '';
+
+        let diffClass = '';
+        if (char1 !== char2) {
+          diffClass = 'diff';
+        }
+        const diffContent = char1 === char2 ? '' : `&#10060`;
+
+        diffResult += `<tr class="${diffClass}">
+                                      <td>${i + 1}</td>
+                                      <td>${char1}</td>
+                                      <td>${char2}</td>
+                                      <td>${diffContent}</td>
+                                  </tr>`;
+      }
+      diffResult += '</table>';
+
+      document.getElementById('diffContainer').innerHTML = diffResult;
+    }
+
+    function createInputTable(str1, str2, colA, colB) {
+      let inputTableText = '<table class="inputTable">';
+
+      inputTableText += `<tr>
+                  <th style="width: 10%;"></th>    
+                  <th style="width: 90%;"></th>
+                  </tr>`;
+
+      inputTableText += `<tr>
+                                  <td>${colA}</td>
+                                  <td><input type="text" id="inputTextA" value="${str1}" oninput="compareStrings(this.value, document.getElementById('inputTextB').value, columnA, columnB)"></td>
+                                </tr>`;
+      inputTableText += `<tr>
+                                  <td>${colB}</td>
+                                  <td><input type="text" id="inputTextB" value="${str2}" oninput="compareStrings(document.getElementById('inputTextA').value, this.value, columnA, columnB)"></td>
+                                </tr>`;
+      inputTableText += '</table>';
+
+      document.getElementById('inputContainer').innerHTML = inputTableText;
+    }
+
+
+    createInputTable(textA, textB, columnA, columnB);
+    compareStrings(textA, textB, columnA, columnB);
+
+  </script>
+</body>
+
+</html>
