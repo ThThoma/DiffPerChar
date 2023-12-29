@@ -1,0 +1,52 @@
+table.diffTable {
+  border: 1px solid #aaaaaa;
+  border-collapse: collapse;
+  border-style: groove;
+  border-radius: 4px;
+  width: 40%;
+  table-layout: fixed;
+}
+
+table.diffTable th,
+table.diffTable td {
+  border: 1px solid #aaaaaa;
+  text-align: center;
+}
+
+table.diffTable th {
+  background-color: azure;
+  padding: 8px;
+}
+
+table.diffTable td {
+  font-family: monospace;
+  font-size: larger;
+  padding: 4px;
+}
+
+table.inputTable {
+  border: none;
+  padding: 8px;
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+}
+
+table.inputTable td:nth-child(2) input {
+  font-family: "Courier New", monospace;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tableHeader:nth-child(1) th{ /*fixme*/
+    width: '10%';
+}
+
+.tableHeader:nth-child(2) th{
+    width: '90%';
+}
+
+.diff {
+  background-color: #ffffaa;
+}
